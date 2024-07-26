@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using minimalAPIMongo.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
