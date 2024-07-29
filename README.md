@@ -1,13 +1,8 @@
-<p align="center">
-  <img src="https://github.com/Lucca-gOn/vitalhubteamwork/assets/22855740/77de95ed-639d-4adf-9596-af86b0042e1d" alt="Logo" width="400"/>
-</p>
-
-
 # API com MongoDB.
 
 Este repositório tem como objetivo manter arquivos referente aos estudos efetuados em sala de aula no Senai Informática, contendo os arquivos e explicações necessárias para criação, utilização e aplicação de uma API utilizando como linguagem de programação o C# e como banco de dados o MongoDB.
 
-
+<!--
 
 ## Screenshots
 
@@ -16,12 +11,11 @@ Este repositório tem como objetivo manter arquivos referente aos estudos efetua
 
 ## Demonstração
 
-
+-->
 ## Recursos utilizados durante o desenvolvimento:
 
 -	SO:
 	-	![Windows 11](https://img.shields.io/badge/Windows%2011-%230079d5.svg?style=for-the-badge&logo=Windows%2011&logoColor=white)
-	-	![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 
 -  IDEs/Editors:
    -  ![Visual Studio](https://img.shields.io/badge/Visual%20Studio-5C2D91.svg?style=for-the-badge&logo=visual-studio&logoColor=white)
