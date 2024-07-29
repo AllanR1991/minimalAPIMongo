@@ -9,11 +9,14 @@ namespace minimalAPIMongo.Domains
         [BsonElement("_id"), BsonRepresentation(BsonType.ObjectId)] // Esta opçao define o nome do campo no mongoDB como "_id" e o tipo como "ObjectId"
         public string? Id {  get; set; }
         [BsonElement("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         [BsonElement("price")]
         public decimal Price { get; set; }
 
-        // Asiciona um dicionario para atributos adicionais.
+        /// <summary>
+        /// A partir daqui o codigo serve para poder adicionar mais propriedades que não são definidas no escopo do projeto.
+        /// </summary>
+        // Adiciona um dicionario para atributos adicionais.
         public Dictionary<string, string> AdditionalAtributes { get; set; }
 
         /// <summary>

@@ -100,5 +100,28 @@ namespace minimalAPIMongo.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpDelete("{id:length(24)}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                var book = await _product.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+                if (book is null)
+                {
+                    return NotFound();
+                }
+
+                await _product.DeleteOneAsync(x => x.Id == id);
+
+                return NoContent();
+            }
+            catch (Exception e )
+            {
+                return BadRequest(e.Message);
+                throw;
+            }
+        }
     }
 }
