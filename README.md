@@ -1,17 +1,31 @@
+![SENAI_São_Paulo_logo](https://github.com/user-attachments/assets/64d5dde5-e99d-434a-ad5e-81f7dd74c1a1)
+
 # API com MongoDB.
 
 Este repositório tem como objetivo manter arquivos referente aos estudos efetuados em sala de aula no Senai Informática, contendo os arquivos e explicações necessárias para criação, utilização e aplicação de uma API utilizando como linguagem de programação o C# e como banco de dados o MongoDB.
+
+## Pré-Requisitos
+
+Instalar o banco e a ferramenta de visual do banco.
+
+- https://www.mongodb.com/try/download/community
+- https://www.mongodb.com/try/download/compass?authuser=0
+
+## Documentação para aplicação de uma API .Net com Mongo
+
+https://learn.microsoft.com/pt-br/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-8.0&tabs=visual-studio
 
 <!--
 
 ## Screenshots
 
-
-
+-->
 
 ## Demonstração
 
--->
+![Screenshot 2024-07-29 080709](https://github.com/user-attachments/assets/c1f7effc-9897-4791-afa3-bb086ee5b1b3)
+
+
 ## Recursos utilizados durante o desenvolvimento:
 
 -	SO:
@@ -46,11 +60,6 @@ Este repositório tem como objetivo manter arquivos referente aos estudos efetua
 - Envio de E-mail
 - Perfil de usuario
 -->
-
-
-
-
-
     
 ## Autores
 
