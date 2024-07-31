@@ -17,7 +17,7 @@ namespace minimalAPIMongo.Domains
         public string? Status { get; set; }
 
 
-        // Referencia para que eu consiga cadastrar um pedido com os produtos.
+        // Referencia para que seja possivel cadastrar um pedido com os produtos.
         [JsonIgnore] // Usado para ele ser ignorado pelo Json para nao ter redundancia, com a lista abaixo.
         [BsonElement("produto_id")]
         public List<string>? ProductId { get; set; }

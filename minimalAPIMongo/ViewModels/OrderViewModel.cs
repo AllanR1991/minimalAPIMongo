@@ -19,12 +19,12 @@ namespace minimalAPIMongo.ViewModels
 
 
         // Referencia para que eu consiga cadastrar um pedido com os produtos.
-        [JsonIgnore] // Usado para ele ser ignorado pelo Json para nao ter redundancia, com a lista abaixo.
+        // [JsonIgnore] // Usado para ele ser ignorado pelo Json para nao ter redundancia, com a lista abaixo.
         [BsonElement("produto_id")]
         public List<string>? ProductId { get; set; }
 
-        [BsonIgnore]
-        [JsonIgnore]
+        [BsonIgnore] //  Utilizado no contexto de MongoDB para ignorar campos durante a serialização para BSON.
+        [JsonIgnore] // Utilizado no contexto de JSON para ignorar campos durante a serialização e desserialização de JSON.
         // Referencia para quando listar os pedidos , venham os dados de cada produto.
         public List<Product>? Products { get; set; } // Criado uma prop do tipo lista devido a termos varios dados em um pedido.
 
@@ -41,7 +41,7 @@ namespace minimalAPIMongo.ViewModels
 
         // As instruções abaixo permiti adicionar mais propriedades ao Obj que não estão deifinas no escopo acima.
         public Dictionary<string, string> AdditionalAtributes { get; set; }
-        public Order()
+        public OrderViewModel()
         {
             AdditionalAtributes = new Dictionary<string, string>();
         }

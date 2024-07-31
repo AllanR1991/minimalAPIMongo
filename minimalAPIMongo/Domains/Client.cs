@@ -21,7 +21,7 @@ namespace minimalAPIMongo.Domains
         public string? UserId { get; set; }
 
         // Referencia para que consiga exibir o Usuario quando ver Cliente.
-        public User? User { get; set; }
+        // public User? User { get; set; }
 
         // As instruções abaixo permiti adicionar mais propriedades ao Obj que não estão deifinas no escopo acima.
         public Dictionary<string, string> AdditionalAtributes { get; set; }
