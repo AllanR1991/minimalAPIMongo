@@ -39,28 +39,60 @@ namespace minimalAPIMongo.Controllers
         }
 
         [HttpPost]
+        /*
+            -   Task é uma tarefa que, quando concluída, retornará um valor do tipo T.
+            -   ActionResult<T> é um tipo que representa o resultado de uma ação em um controlador ASP.NET Core. ActionResult pode representar diferentes tipos de resposta HTTP, como ViewResult, JsonResult, ou StatusCodeResult. Quando T é especificado, como ActionResult<Order>, ele significa que o resultado da ação pode ser um resultado de ação que também inclui um valor do tipo Order.
+            -   Order é o tipo de dado que você espera que seja retornado. Em um contexto de API, isso pode ser um modelo de dados que você está manipulando ou retornando em resposta a uma solicitação.
+        */
         public async Task<ActionResult<Order>> NewItem(OrderViewModel newOrder)
         {
             try
             {
-                //  Criamos uma instancia de order onde armazenamos os dados.
-                Order order = new Order();
+                //  Criamos neste ponto um objeto, chamado order da classe Order através da instancia "new Order()" e instanciamos.                
+                Order order = new Order
+                {
+                    Products = new List<Product>()
+                };
+
                 order.Id = newOrder.Id;
                 order.Date = newOrder.Date;
                 order.Status = newOrder.Status;
-                order.ProductId = newOrder.ProductId; // Aguardando uma lista de produtos.
+
+                foreach (var products in newOrder.ProductId)
+                {
+                    var findProduct = await _product.Find(product => product.Id == products).FirstOrDefaultAsync();
+
+                    if (findProduct == null)
+                    {
+                        return NotFound($"The product {products} is not found");
+                    }
+
+                    Console.WriteLine("Vasculhando os ids dos produtos.");
+                    Console.WriteLine(products);
+
+                    order.Products?.Add(findProduct);                  
+                }
+
+                order.ProductId = newOrder.ProductId; 
+
+
+
                 order.ClienteId = newOrder.ClienteId;
-                //  Fazemos uma busca pelo id do Cliente.
-                var client = await _client.Find(client => client.Id == newOrder.Id).FirstOrDefaultAsync();
+                
+                //  Fazemos uma busca pelo id do Cliente, para verificar se existe o id do cliente para poder adicionar os dados
+                var client = await _client.Find(client => client.Id == newOrder.ClienteId).FirstOrDefaultAsync();
+                
                 //  Verificamos se cliente existe
                 if(client == null)
                 {
-                    return NotFound();
+                    return NotFound($"The client {newOrder.ClienteId} not found.");
                 }
-                //  Cadastramos 
+
                 order.Client = client;
 
+                //  Cadastramos                                
                 await _order.InsertOneAsync(order);
+                
                 return StatusCode(201, order);
             }
             catch (Exception e)
