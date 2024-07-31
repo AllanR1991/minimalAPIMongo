@@ -45,12 +45,21 @@ namespace minimalAPIMongo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> NewItem(Client newProduct)
+        public async Task<ActionResult> NewItem(Client newClient)
         {
             try
             {
-                await _client.InsertOneAsync(newProduct);
-                return StatusCode(201, newProduct);
+                //  Realizando uma verificação para ver se existe o UserId passado por newClient na colection User.
+                var user = await _user.Find(user => user.Id == newClient.UserId).FirstOrDefaultAsync();
+                
+                //  Caso o user não seja encontrado ele retorna notFound parando assim a inserção de dados.
+                if (user == null)
+                {
+                    return NotFound("Usuário não encontrado ou não existe.");
+                }
+
+                await _client.InsertOneAsync(newClient);
+                return StatusCode(201, newClient);
             }
             catch (Exception e)
             {
