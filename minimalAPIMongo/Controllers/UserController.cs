@@ -77,12 +77,28 @@ namespace minimalAPIMongo.Controllers
 
                 if (user is null)
                 {
-                    return NotFound();
+                    return NotFound("User not found.");
                 }
 
-                userAlterate.Id = user.Id;
+                if(userAlterate.Id != null)
+                {
+                    user.Id = userAlterate.Id;
+                }
+                if(userAlterate.Name != null)
+                {
+                    user.Name = userAlterate.Name;
+                }
+                if(userAlterate.Email != null)
+                {
+                    user.Email = userAlterate.Email;
+                }
+                if(userAlterate.Password != null)
+                {
+                    user.Password = userAlterate.Password;
+                }
+                    
 
-                await _user.ReplaceOneAsync(x => x.Id == id, userAlterate);
+                await _user.ReplaceOneAsync(x => x.Id == id, user);
 
                 return NoContent();
             }
