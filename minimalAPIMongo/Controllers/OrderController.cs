@@ -33,14 +33,14 @@ namespace minimalAPIMongo.Controllers
                 
                 if (listOrders is null)
                 {
-                    return NotFound("");
+                    return NotFound("Not Found List of orders.");
                 }
 
                 foreach (Order order in listOrders) 
                 {
                     if (order.ProductId != null)
                     {
-                        var filter = Builders<Product>.Filter.In(product => product.Id, order.ProductId); // Verifica se a o productId  esta em order.ProductId;
+                        FilterDefinition<Product> filter = Builders<Product>.Filter.In(product => product.Id, order.ProductId); // Verifica se a o productId  esta em order.ProductId;
 
                         order.Products = await _product.Find(filter).ToListAsync();
                     }
@@ -213,7 +213,7 @@ namespace minimalAPIMongo.Controllers
 
                 if (order is null)
                 {
-                    return NotFound();
+                    return NotFound($"Not found a order with id {id}");
                 }
 
                 await _order.DeleteOneAsync(x => x.Id == id);

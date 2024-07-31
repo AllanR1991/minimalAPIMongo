@@ -33,6 +33,10 @@ namespace minimalAPIMongo.Controllers
             try
             {
                 var products = await _product.Find(FilterDefinition<Product>.Empty).ToListAsync();
+                if (products == null)
+                {
+                    NotFound($"Not any product found.");
+                }
                 return Ok(products);
             }
             catch (Exception e) 
@@ -66,7 +70,7 @@ namespace minimalAPIMongo.Controllers
 
                 if (product is null)
                 {
-                    return NotFound();
+                    return NotFound($"Not found product with id : {id}");
                 }
 
                 return Ok(product);
@@ -86,7 +90,7 @@ namespace minimalAPIMongo.Controllers
 
                 if (product is null)
                 {
-                    return NotFound();
+                    return NotFound($"Not found product with id : {id}");
                 }
 
                 productAlterate.Id = product.Id;
