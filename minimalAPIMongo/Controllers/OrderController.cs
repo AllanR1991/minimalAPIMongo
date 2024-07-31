@@ -28,8 +28,34 @@ namespace minimalAPIMongo.Controllers
         {
             try
             {
-                var orders = await _order.Find(FilterDefinition<Order>.Empty).ToListAsync();
-                return Ok(orders);
+                
+                List<Order> listOrders = await _order.Find(FilterDefinition<Order>.Empty).ToListAsync();
+                
+                if (listOrders is null)
+                {
+                    return NotFound("");
+                }
+
+                foreach (Order order in listOrders) 
+                {
+                    if (order.ProductId != null)
+                    {
+                        var filter = Builders<Product>.Filter.In(product => product.Id, order.ProductId); // Verifica se a o productId  esta em order.ProductId;
+
+                        order.Products = await _product.Find(filter).ToListAsync();
+                    }
+
+                    if (order.ClienteId != null)
+                    {
+                        order.Client = await _client.Find(client => client.Id == order.ClienteId).FirstOrDefaultAsync();
+                    }
+                }
+
+                
+
+                
+
+                return Ok(listOrders);
             }
             catch (Exception e)
             {
@@ -51,44 +77,44 @@ namespace minimalAPIMongo.Controllers
                 //  Criamos neste ponto um objeto, chamado order da classe Order através da instancia "new Order()" e instanciamos.                
                 Order order = new Order
                 {
-                    Products = new List<Product>()
+                    //Products = new List<Product>()
                 };
 
                 order.Id = newOrder.Id;
                 order.Date = newOrder.Date;
                 order.Status = newOrder.Status;
 
-                foreach (var products in newOrder.ProductId)
-                {
-                    var findProduct = await _product.Find(product => product.Id == products).FirstOrDefaultAsync();
+                //foreach (var products in newOrder.ProductId)
+                //{
+                //    var findProduct = await _product.Find(product => product.Id == products).FirstOrDefaultAsync();
 
-                    if (findProduct == null)
-                    {
-                        return NotFound($"The product {products} is not found");
-                    }
+                //    if (findProduct == null)
+                //    {
+                //        return NotFound($"The product {products} is not found");
+                //    }
 
-                    Console.WriteLine("Vasculhando os ids dos produtos.");
-                    Console.WriteLine(products);
+                //    Console.WriteLine("Vasculhando os ids dos produtos.");
+                //    Console.WriteLine(products);
 
-                    order.Products?.Add(findProduct);                  
-                }
+                //    order.Products?.Add(findProduct);                  
+                //}
 
-                order.ProductId = newOrder.ProductId; 
+                order.ProductId = newOrder.ProductId;
 
 
 
                 order.ClienteId = newOrder.ClienteId;
-                
+
                 //  Fazemos uma busca pelo id do Cliente, para verificar se existe o id do cliente para poder adicionar os dados
-                var client = await _client.Find(client => client.Id == newOrder.ClienteId).FirstOrDefaultAsync();
+                //var client = await _client.Find(client => client.Id == newOrder.ClienteId).FirstOrDefaultAsync();
                 
                 //  Verificamos se cliente existe
-                if(client == null)
-                {
-                    return NotFound($"The client {newOrder.ClienteId} not found.");
-                }
+                //if(client == null)
+                //{
+                //    return NotFound($"The client {newOrder.ClienteId} not found.");
+                //}
 
-                order.Client = client;
+                //order.Client = client;
 
                 //  Cadastramos                                
                 await _order.InsertOneAsync(order);
@@ -106,14 +132,26 @@ namespace minimalAPIMongo.Controllers
         public async Task<ActionResult<Order>> Get(string id)
         {
             try
-            {
-                var order = await _order.Find(x => x.Id == id).FirstOrDefaultAsync();
+            {                
+                Order order = await _order.Find(x => x.Id == id).FirstOrDefaultAsync();
 
                 if (order is null)
                 {
                     return NotFound();
                 }
 
+                if ( order.ProductId != null)
+                {
+                    var productList = Builders<Product>.Filter.In(product => product.Id, order.ProductId); 
+
+                    order.Products = await _product.Find(productList).ToListAsync();
+                }
+
+                if ( order.ClienteId != null )
+                {
+                    order.Client = await _client.Find(client => client.Id == order.ClienteId).FirstOrDefaultAsync();
+                }
+                
                 return Ok(order);
             }
             catch (Exception e)
@@ -123,20 +161,40 @@ namespace minimalAPIMongo.Controllers
         }
 
         [HttpPut("{id:length(24)}")]
-        public async Task<IActionResult> Update(string id, Order orderAlterate)
+        public async Task<IActionResult> Update(string id, OrderViewModel orderAlterate)
         {
             try
             {
-                var order = await _order.Find(x => x.Id == id).FirstOrDefaultAsync();
-
-                if (order is null)
+                //  Variavel do tipo Order, responsavel por armazenar um objeto Order.
+                Order orderSearch = await _order.Find(x => x.Id == id).FirstOrDefaultAsync();
+                
+                if (orderSearch is null)
                 {
                     return NotFound();
                 }
 
-                orderAlterate.Id = order.Id;
+                if(orderAlterate.Id != null) 
+                {
+                    orderSearch.Id= orderAlterate.Id;
+                }
+                if(orderAlterate.Status != null)
+                {
+                    orderSearch.Status = orderAlterate.Status;
+                }
+                if(orderAlterate.Date != null)
+                {
+                    orderSearch.Date = orderAlterate.Date;
+                }
+                if(orderAlterate.ProductId != null)
+                {
+                    orderSearch.ProductId = orderAlterate.ProductId;
+                }
+                if(orderAlterate.ClienteId != null)
+                {
+                    orderSearch.ClienteId = orderAlterate.ClienteId;
+                }
 
-                await _order.ReplaceOneAsync(x => x.Id == id, orderAlterate);
+                await _order.ReplaceOneAsync(orderSearch => orderSearch.Id == id, orderSearch);
 
                 return NoContent();
             }
